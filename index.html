@@ -1,0 +1,806 @@
+
+<html>
+<body>
+    <style>
+      .bordercol{
+        border:4px solid rgb(14, 7, 119);
+      }
+      
+      .white{
+        color: white;
+      }
+      .red{
+        background-color: #9df3c2;
+      }
+        body{
+        font-family: Source Sans Pro,sans-serif;
+        font-size: 25px;color:rgb(14, 7, 119);
+        }
+        table
+        {
+        background-color:#bec6d4;
+        margin:auto;
+        border: 2px solid #344861 !important;
+        color:rgb(14, 7, 119);
+        border-collapse: collapse;
+        padding: 0px; 
+        }
+        .top{
+        border-top: 2px solid #344861 !important;
+        }
+        td:nth-child(3){
+        border-right: 2px solid #344861 !important;    
+        }
+        td:nth-child(6){
+        border-right: 2px solid #344861 !important;    
+        }
+        tr,td{
+        margin:0px;
+        padding:0px;
+        }
+        input{
+        border: 1px solid #bec6d4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0px;
+        width: 60px;
+        height: 60px;
+        vertical-align: middle;
+        text-align: center;
+        user-select: none;
+        font-size: 25px;
+        background-color: white;
+        color:rgb(14, 7, 119);
+        }
+        .predefined{
+        background-color: #bec6d4;
+        }
+        input:hover{
+        background-color: #99badd;
+        }
+        .disable{
+        background-color: #AFEEEE !important;
+        border:1px solid #bec6d4;
+        }
+       .disable{
+       opacity: 0.5 !important; 
+       cursor: not-allowed;
+       }
+      .changerow{
+       background-color:green; 
+      }
+      .changevalidboxes{
+        background-color:#F3A360;
+      }
+
+
+      button{
+        width:150px;
+        height:50px;
+      margin-bottom: 20px;}
+      .flex
+      {display:flex;
+        justify-content: space-evenly;
+       
+      }
+      h1{text-align: center;}
+    </style>
+    <script>
+const easy = [
+    "-6------7------5-2------1---362----81--96-----71--9-4-5-2---651---78----345-------",
+    "-685329174971485326234761859362574981549618732718293465823946517197852643456137298"
+  ];
+  const medium = [
+    "---9-------4----6-758-31----15--4-36-------4-8----9-------75----3-------1--2--3---",
+    "-619472583243985617587316924158247369926531478734698152891754236365829741472163895"
+  ];
+  const hard = [
+    "--1-5-------97-42----5----7-5---3---7-6--2-41---8--5---1-4------2-3-----9-7----8--",
+    "-712583694639714258845269173521436987367928415498175326184697532253841769976352841"
+  ];
+var result=easy[1];
+var difficulty = easy[0];
+function validate() {
+ 
+  validaterows();
+  validatecols();
+  validatecheck();
+
+  for(var i=1;i<82;i++){
+           if(document.getElementById(`a${i}`).value>0&&document.getElementById(`a${i}`).value <10)
+              {
+                document.querySelector(`#a${i}`).style.color = "rgb(14, 7, 119)";
+              }
+                else{
+                  if(!document.getElementById(`a${i}`).value=="")
+                  document.querySelector(`#a${i}`).style.color = "red";
+                  else
+                  document.querySelector(`#a${i}`).style.color = "rgb(14, 7, 119)";
+
+            }
+          }
+        }   
+function validaterow(rownumber){
+const values=[];
+for(let i=(rownumber-1)*9+1;i<=rownumber*9;i++){
+  values.push(document.getElementById(`a${i}`).value);
+} 
+const filtered=values.filter(v=>v!=="")
+filtered.sort()
+if(filtered.length<2)
+nocolorrow(rownumber);
+for(var i=0;i<filtered.length-1;i++){
+if(filtered[i]==filtered[i+1]){ 
+  colorrow(rownumber,filtered[i]);break;
+}else{ 
+  nocolorrow(rownumber);
+}}
+}
+function validaterows(){
+  for(var i=1;i<=9;i++)
+  validaterow(i)
+}
+function validatecol(colnumber){
+const values=[]
+for(let i=colnumber;i<=9*8+colnumber;i=i+9){
+  values.push(document.getElementById(`a${i}`).value);
+} 
+
+const filtc=values.filter(v=>v!=="")
+filtc.sort()
+if(filtc.length<2)
+nocolorcol(colnumber);
+for(var i=0;i<filtc.length-1;i++){
+if(filtc[i]==filtc[i+1]){ 
+  colorcol(colnumber,filtc[i]);
+  break;
+}else{ 
+  nocolorcol(colnumber);
+}}
+
+}
+
+function colorcol(colnumber,number){
+  for(let i=colnumber;i<9*9+colnumber;i=i+9){
+    if(document.getElementById(`a${i}`).value=="")
+    document.getElementById(`a${i}`).classList.remove("bordercol");
+    if(document.getElementById(`a${i}`).value==number){
+      document.getElementById(`a${i}`).classList.add("bordercol");
+ 
+  }
+   
+  }
+}
+function nocolorcol(colnumber){
+  for(let i=colnumber;i<=81;i++){
+   if(i%9==colnumber)
+    document.getElementById(`a${i}`).classList.remove("bordercol");
+  }
+}
+
+function nocolorrow(rn){
+  for(let i=(rn-1)*9+1;i<=rn*9;i++){
+    
+    document.getElementById(`a${i}`).classList.remove("changerow");
+} 
+}
+function validatecols(){
+  for(var i=1;i<=9;i++)
+  validatecol(i)
+}
+function colorrow(rn,number){
+  for(let i=(rn-1)*9+1;i<=rn*9;i++){
+    if(document.getElementById(`a${i}`).value=="")
+    document.getElementById(`a${i}`).classList.remove("changerow");
+    if(document.getElementById(`a${i}`).value==number)
+    document.getElementById(`a${i}`).classList.add("changerow");
+} 
+}
+function colorrowbox(rn){
+  for(let i=(rn-1)*9+1;i<=rn*9;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+} 
+}
+function colorcolbox(colnumber){
+  for(let i=colnumber;i<9*9+colnumber;i=i+9){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+function validaterowcheck(rownumber){
+const values=[];
+for(let i=(rownumber-1)*9+1;i<=rownumber*9;i++){
+  values.push(document.getElementById(`a${i}`).value);
+} 
+const filtered=values.filter(v=>v!=="")
+filtered.sort(); var a=[];
+
+for(var i=0;i<filtered.length-1;i++){
+if(filtered[i]==filtered[i+1]){ 
+a.push(filtered[i]);  }
+}
+}
+function validatecolcheck(colnumber){
+const values=[]
+for(let i=colnumber;i<9*9+colnumber;i=i+9){
+  values.push(document.getElementById(`a${i}`).value);
+} 
+
+const filtc=values.filter(v=>v!=="")
+var a=[];
+filtc.sort()
+
+for(var i=0;i<filtc.length-1;i++){
+if(filtc[i]==filtc[i+1]){ 
+a.push(filtered[i]);
+}
+
+}return a;
+}
+function validatecheck(){
+  var box1=[];
+  var box2=[];
+  var box3=[];
+  var box4=[];
+  var box5=[];
+  var box6=[];
+  var box7=[];
+  var box8=[];
+  var box9=[];
+
+  for(var id=1;id<83;id++){
+
+  if(id==1||id==2||id==3||id==10||id==11||id==12||id==19||id==20||id==21){
+  box1.push(document.getElementById(`a${id}`).value);
+}
+if(id==4||id==5||id==6||id==13||id==14||id==15||id==22||id==23||id==24){
+  box2.push(document.getElementById(`a${id}`).value);
+
+}
+if(id==7||id==8||id==9||id==16||id==17||id==18||id==25||id==26||id==27){
+  box3.push(document.getElementById(`a${id}`).value);
+}
+if(id==28||id==29||id==30||id==37||id==38||id==39||id==46||id==47||id==48){
+  box4.push(document.getElementById(`a${id}`).value);
+}
+if(id==31||id==32||id==33||id==40||id==41||id==42||id==49||id==50||id==51){
+  box5.push(document.getElementById(`a${id}`).value);
+}
+if(id==34||id==35||id==36||id==43||id==44||id==45||id==52||id==53||id==54){
+  box6.push(document.getElementById(`a${id}`).value);
+}
+if(id==55||id==56||id==57||id==64||id==65||id==66||id==73||id==74||id==75){
+  box7.push(document.getElementById(`a${id}`).value);
+}
+if(id==58||id==59||id==60||id==67||id==68||id==69||id==76||id==77||id==78){
+  box8.push(document.getElementById(`a${id}`).value);
+}
+if(id==61||id==62||id==63||id==70||id==71||id==72||id==79||id==80||id==81){
+  box9.push(document.getElementById(`a${id}`).value);
+}
+checkbox(box1,1);
+checkbox(box2,2);
+checkbox(box3,3);
+checkbox(box4,4);
+checkbox(box5,5);
+checkbox(box6,6);
+checkbox(box7,7);
+checkbox(box8,8);
+checkbox(box9,9);
+
+}
+}
+function checkbox(box,n){
+const filtered=box.filter(v=>v!=="")
+filtered.sort(); var a=[];
+
+if(filtered.length<=1){
+  removeyellow(n);
+}
+for(var i=0;i<filtered.length-1;i++){
+if(filtered[i]==filtered[i+1]){ 
+
+  colorbox(n);
+  break;
+}
+else {
+  removeyellow(n);
+}
+}
+}
+function removeyellow(id){
+
+  if(id==1){
+  for(var i=1;i<=3;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=10;i<=12;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=19;i<=21;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==2){
+  for(var i=4;i<=6;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=13;i<=15;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=22;i<=24;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==3){
+  for(var i=7;i<=9;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=16;i<=18;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=25;i<=27;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==4){
+  for(var i=28;i<=30;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=37;i<=39;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=46;i<=48;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==5){
+  for(var i=31;i<=33;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=40;i<=42;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=49;i<=51;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==6){
+  for(var i=34;i<=36;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=43;i<=45;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=52;i<=54;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==7){
+  for(var i=55;i<=56;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=64;i<=66;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=73;i<=75;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==8){
+  for(var i=58;i<=60;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=67;i<=69;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=76;i<=78;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+if(id==9){
+  for(var i=61;i<=63;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=70;i<=72;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+  for(var i=79;i<=81;i++){
+    document.getElementById(`a${i}`).classList.remove("changevalidboxes");
+  }
+}
+}
+
+function colorbox(id){
+
+  if(id==1){
+  for(var i=1;i<=3;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=10;i<=12;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=19;i<=21;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==2){
+  for(var i=4;i<=6;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=13;i<=15;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=22;i<=24;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==3){
+  for(var i=7;i<=9;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=16;i<=18;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=25;i<=27;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==4){
+  for(var i=28;i<=30;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=37;i<=39;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=46;i<=48;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==5){
+  for(var i=31;i<=33;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=40;i<=42;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=49;i<=51;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==6){
+  for(var i=34;i<=36;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=43;i<=45;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=52;i<=54;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==7){
+  for(var i=55;i<=56;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=64;i<=66;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=73;i<=75;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==8){
+  for(var i=58;i<=60;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=67;i<=69;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=76;i<=78;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+if(id==9){
+  for(var i=61;i<=63;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=70;i<=72;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+  for(var i=79;i<=81;i++){
+    document.getElementById(`a${i}`).classList.add("changevalidboxes");
+  }
+}
+}
+
+window.onload = function () {
+    sudoku();
+}
+function m(){
+  difficulty=medium[0];
+  result=medium[1];
+  sudoku();
+}
+function e(){
+  difficulty=easy[0];
+  result=easy[1];
+  sudoku();
+}
+function h(){
+  difficulty=hard[0];
+  sudoku();
+}
+function nocolor(){
+  for(var i=1;i<82;i++){
+    document.getElementById(`a${i}`).classList.remove("red");
+  }
+}
+function findrc(id){
+  
+        var r=(id-1)/9+1;
+        if(r==10)
+        r=9;
+        var c=id%9;
+        if(c==0)
+        c=9;
+        nocolor();
+        colorrowbox(Math.floor(r));
+        colorcolbox(c);
+        colorsmallboxes(id);
+    }
+function colorsmallboxes(id){
+if(id==1||id==2||id==3||id==10||id==11||id==12||id==19||id==20||id==21){
+  for(var i=1;i<=3;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=10;i<=12;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=19;i<=21;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==4||id==5||id==6||id==13||id==14||id==15||id==22||id==23||id==24){
+  for(var i=4;i<=6;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=13;i<=15;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=22;i<=24;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==7||id==8||id==9||id==16||id==17||id==18||id==25||id==26||id==27){
+  for(var i=7;i<=9;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=16;i<=18;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=25;i<=27;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==28||id==29||id==30||id==37||id==38||id==39||id==46||id==47||id==48){
+  for(var i=28;i<=30;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=37;i<=39;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=46;i<=48;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==31||id==32||id==33||id==40||id==41||id==42||id==49||id==50||id==51){
+  for(var i=31;i<=33;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=40;i<=42;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=49;i<=51;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==34||id==35||id==36||id==43||id==44||id==45||id==52||id==53||id==54){
+  for(var i=34;i<=36;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=43;i<=45;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=52;i<=54;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==55||id==56||id==57||id==64||id==65||id==66||id==73||id==74||id==75){
+  for(var i=55;i<=56;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=64;i<=66;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=73;i<=75;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==58||id==59||id==60||id==67||id==68||id==69||id==76||id==77||id==78){
+  for(var i=58;i<=60;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=67;i<=69;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=76;i<=78;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+if(id==61||id==62||id==63||id==70||id==71||id==72||id==79||id==80||id==81){
+  for(var i=61;i<=63;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=70;i<=72;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+  for(var i=79;i<=81;i++){
+    document.getElementById(`a${i}`).classList.add("red");
+  }
+}
+}
+function sudoku(){
+nocolor();
+
+  for(var i=1;i<82;i++){
+  if(difficulty[i]!="-"){
+      document.getElementById(`a${i}`).value = difficulty[i];
+      document.getElementById(`a${i}`).classList.add("disable");
+      document.getElementById(`a${i}`).disabled = true;}
+  
+    else{
+      document.getElementById(`a${i}`).value = "";
+      document.getElementById(`a${i}`).classList.remove("disable");
+      document.getElementById(`a${i}`).disabled = false;
+    }
+   
+}
+
+}
+   
+   function submit(){var  j=0;
+     for(var i=1;i<83;i++){
+       if(document.getElementById(`a${i}`).value==result[i]){}
+       else {
+         alert("Input Incorrect/Empty :( ");
+         j=1;break;
+       }
+     }if(j==0)alert("You Won :)");
+   }
+   
+   
+   </script>
+<h1>Sudoku</h1>
+<div class="flex">
+<button onclick="validate()">Validate</button>
+<button onclick="e()">Easy </button>
+<button onclick="m()">Medium</button>
+<button onclick="h()">Hard</button>
+<button onclick="submit()">Submit</button>
+</div>
+<table>
+   <tr>
+       <td><input  maxlength="1" id="a1"  onclick="findrc(1)" onchange="validate()" /></td>
+       <td><input  maxlength="1" id="a2"  onclick="findrc(2)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a3"  onclick="findrc(3)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a4"  onclick="findrc(4)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a5"  onclick="findrc(5)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a6"  onclick="findrc(6)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a7"  onclick="findrc(7)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a8"  onclick="findrc(8)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a9"  onclick="findrc(9)" onchange="validate()"/></td>
+      
+
+   </tr>
+   
+   <tr>
+       <td><input  maxlength="1" id="a10" onclick="findrc(10)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a11" onclick="findrc(11)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a12" onclick="findrc(12)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a13" onclick="findrc(13)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a14" onclick="findrc(14)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a15" onclick="findrc(15)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a16" onclick="findrc(16)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a17" onclick="findrc(17)" onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a18" onclick="findrc(18)" onchange="validate()"/></td>
+       
+    
+</tr>
+<tr>
+    <td><input  maxlength="1" id="a19" onclick="findrc(19)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a20" onclick="findrc(20)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a21" onclick="findrc(21)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a22" onclick="findrc(22)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a23" onclick="findrc(23)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a24" onclick="findrc(24)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a25" onclick="findrc(25)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a26" onclick="findrc(26)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a27" onclick="findrc(27)"onchange="validate()"/></td> 
+</tr>
+<tr class="top">
+       <td><input  maxlength="1" id="a28"onclick="findrc(28)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a29"onclick="findrc(29)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a30"onclick="findrc(30)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a31"onclick="findrc(31)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a32"onclick="findrc(32)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a33"onclick="findrc(33)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a34"onclick="findrc(34)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a35"onclick="findrc(35)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a36"onclick="findrc(36)"onchange="validate()"/></td>
+       
+</tr>
+<tr>
+    <td><input  maxlength="1" id="a37" onclick="findrc(37)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a38" onclick="findrc(38)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a39" onclick="findrc(39)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a40" onclick="findrc(40)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a41" onclick="findrc(41)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a42" onclick="findrc(42)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a43" onclick="findrc(43)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a44" onclick="findrc(44)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a45" onclick="findrc(45)"onchange="validate()"/></td>   
+</tr>
+<tr>
+       <td><input  maxlength="1" id="a46"onclick="findrc(46)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a47"onclick="findrc(47)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a48"onclick="findrc(48)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a49"onclick="findrc(49)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a50"onclick="findrc(50)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a51"onclick="findrc(51)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a52"onclick="findrc(52)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a53"onclick="findrc(53)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a54"onclick="findrc(54)"onchange="validate()"/></td>
+
+</tr>
+<tr class="top">
+    <td><input  maxlength="1" id="a55"onclick="findrc(55))" onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a56"onclick="findrc(56)" onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a57"onclick="findrc(57)" onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a58"onclick="findrc(58)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a59"onclick="findrc(59)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a60"onclick="findrc(60)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a61"onclick="findrc(61)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a62"onclick="findrc(62)"onchange="validate()"/></td>
+    <td><input  maxlength="1" id="a63"onclick="findrc(63)"onchange="validate()"/></td>
+
+
+</tr>
+
+<tr>
+       <td><input  maxlength="1" id="a64"onclick="findrc(64)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a65"onclick="findrc(65)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a66"onclick="findrc(66)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a67"onclick="findrc(67))"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a68"onclick="findrc(68)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a69"onclick="findrc(69)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a70"onclick="findrc(70)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a71"onclick="findrc(71)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a72"onclick="findrc(72)"onchange="validate()"/></td>
+</tr>
+<tr>
+       <td><input  maxlength="1" id="a73"onclick="findrc(73)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a74"onclick="findrc(74)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a75"onclick="findrc(75)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a76"onclick="findrc(76)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a77"onclick="findrc(77)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a78"onclick="findrc(78)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a79"onclick="findrc(79)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a80"onclick="findrc(80)"onchange="validate()"/></td>
+       <td><input  maxlength="1" id="a81"onclick="findrc(81)"onchange="validate()"/></td>
+    
+</tr>
+</table>
+
+</body>
+</html>
